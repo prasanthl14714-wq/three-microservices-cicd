@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -12,32 +13,35 @@ pipeline {
 
         stage('Verify Tools') {
             steps {
+                bat 'git --version'
+                bat 'docker --version'
                 bat 'docker-compose version'
-                bat 'docker-compose config -q'
-                bat 'docker-compose build'
             }
         }
 
-        
-stage('Validate Docker Compose') {
-    steps {
-        bat 'docker-compose config -q'
-    }
-}
+        stage('Validate Docker Compose') {
+            steps {
+                bat 'docker-compose config -q'
+                echo 'Docker Compose configuration is valid.'
+            }
+        }
 
-stage('Build Microservices') {
-    steps {
-        bat 'docker-compose build'
+        stage('Build Microservices') {
+            steps {
+                bat 'docker-compose build'
+                echo 'All microservice images built successfully.'
+            }
+        }
     }
-}
-
 
     post {
         success {
             echo 'CI pipeline completed successfully!'
         }
+
         failure {
             echo 'CI pipeline failed. Check the console output.'
         }
     }
 }
+
