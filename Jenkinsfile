@@ -18,18 +18,19 @@ pipeline {
             }
         }
 
-        stage('Validate Docker Compose') {
-            steps {
-                bat 'docker compose config -q'
-            }
-        }
-
-        stage('Build Microservices') {
-            steps {
-                bat 'docker compose build'
-            }
-        }
+        
+stage('Validate Docker Compose') {
+    steps {
+        bat 'docker-compose config -q'
     }
+}
+
+stage('Build Microservices') {
+    steps {
+        bat 'docker-compose build'
+    }
+}
+
 
     post {
         success {
