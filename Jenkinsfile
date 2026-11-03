@@ -49,12 +49,13 @@ pipeline {
     }
 
     post {
-        success {
-            echo 'CI pipeline completed successfully!'
-        }
+    success {
+        archiveArtifacts artifacts: 'docs/trivy-reports/*.json',
+                         fingerprint: true
+        echo 'CI pipeline completed successfully!'
+    }
 
-        failure {
-            echo 'CI pipeline failed. Check the console output.'
-        }
+    failure {
+        echo 'CI pipeline failed. Check the console output.'
     }
 }
