@@ -12,9 +12,9 @@ pipeline {
 
         stage('Verify Tools') {
             steps {
-                bat 'git --version'
-                bat 'docker --version'
-                bat 'docker compose version'
+                bat 'docker-compose version'
+                bat 'docker-compose config -q'
+                bat 'docker-compose build'
             }
         }
 
