@@ -3,7 +3,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -49,13 +48,14 @@ pipeline {
     }
 
     post {
-    success {
-        archiveArtifacts artifacts: 'docs/trivy-reports/*.json',
-                         fingerprint: true
-        echo 'CI pipeline completed successfully!'
-    }
+        success {
+            archiveArtifacts artifacts: 'docs/trivy-reports/*.json',
+                             fingerprint: true
+            echo 'CI pipeline completed successfully!'
+        }
 
-    failure {
-        echo 'CI pipeline failed. Check the console output.'
+        failure {
+            echo 'CI pipeline failed. Check the console output.'
+        }
     }
 }
