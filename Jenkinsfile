@@ -45,6 +45,13 @@ pipeline {
                 echo 'Trivy security scans completed.'
             }
         }
+
+        stage('Deploy Application') {
+            steps {
+                bat 'docker-compose up -d'
+                echo 'Application deployed successfully.'
+            }
+        }
     }
 
     post {
@@ -59,3 +66,4 @@ pipeline {
         }
     }
 }
+
