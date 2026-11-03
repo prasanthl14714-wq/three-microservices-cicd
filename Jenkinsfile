@@ -32,6 +32,20 @@ pipeline {
                 echo 'All microservice images built successfully.'
             }
         }
+
+        stage('Trivy Security Scan') {
+            steps {
+                bat 'if not exist docs\\trivy-reports mkdir docs\\trivy-reports'
+
+                bat '"C:\\Tools\\Trivy\\trivy.exe" image --format json --output docs\\trivy-reports\\user-service.json three-microservices-cicd-user-service:latest'
+
+                bat '"C:\\Tools\\Trivy\\trivy.exe" image --format json --output docs\\trivy-reports\\product-service.json three-microservices-cicd-product-service:latest'
+
+                bat '"C:\\Tools\\Trivy\\trivy.exe" image --format json --output docs\\trivy-reports\\order-service.json three-microservices-cicd-order-service:latest'
+
+                echo 'Trivy security scans completed.'
+            }
+        }
     }
 
     post {
@@ -44,4 +58,3 @@ pipeline {
         }
     }
 }
-
