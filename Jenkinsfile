@@ -1,6 +1,9 @@
-
 pipeline {
     agent any
+
+    environment {
+        COMPOSE_PROJECT_NAME = 'three-microservices-cicd'
+    }
 
     stages {
         stage('Checkout') {
@@ -20,14 +23,14 @@ pipeline {
 
         stage('Validate Docker Compose') {
             steps {
-                bat 'docker-compose config -q'
+                bat 'docker-compose -p three-microservices-cicd config -q'
                 echo 'Docker Compose configuration is valid.'
             }
         }
 
         stage('Build Microservices') {
             steps {
-                bat 'docker-compose build user-service product-service order-service'
+                bat 'docker-compose -p three-microservices-cicd build user-service product-service order-service'
                 echo 'All microservice images built successfully.'
             }
         }
@@ -47,13 +50,12 @@ pipeline {
         }
 
         stage('Deploy Application') {
-    steps {
-        bat 'docker-compose up -d --no-deps user-service product-service order-service'
-        bat 'docker-compose restart nginx'
-        sleep(time: 5, unit: 'SECONDS')
-        echo 'Application services deployed and API Gateway refreshed.'
-    }
-}
+            steps {
+                bat 'docker-compose -p three-microservices-cicd up -d --no-deps user-service product-service order-service'
+                sleep(time: 10, unit: 'SECONDS')
+                echo 'Application services deployed.'
+            }
+        }
 
         stage('Application Health Check') {
             steps {
