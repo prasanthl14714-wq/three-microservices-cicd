@@ -47,13 +47,13 @@ pipeline {
         }
 
         stage('Deploy Application') {
-            steps {
-                bat 'docker-compose up -d --no-deps user-service product-service order-service'
-                bat 'docker-compose restart nginx'
-                bat 'timeout /t 5 /nobreak >nul'
-                echo 'Application services deployed and API Gateway refreshed.'
-            }
-        }
+    steps {
+        bat 'docker-compose up -d --no-deps user-service product-service order-service'
+        bat 'docker-compose restart nginx'
+        sleep(time: 5, unit: 'SECONDS')
+        echo 'Application services deployed and API Gateway refreshed.'
+    }
+}
 
         stage('Application Health Check') {
             steps {
