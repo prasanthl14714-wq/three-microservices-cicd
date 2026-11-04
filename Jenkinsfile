@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -31,8 +30,7 @@ pipeline {
                 echo 'All microservice images built successfully.'
             }
         }
-
-        stage('Trivy Security Scan') {
+         stage('Trivy Security Scan') {
             steps {
                 bat 'if not exist docs\\trivy-reports mkdir docs\\trivy-reports'
 
@@ -45,13 +43,26 @@ pipeline {
                 echo 'Trivy security scans completed.'
             }
         }
-
-        stage('Deploy Application') {
+               stage('Deploy Application') {
             steps {
                 bat 'docker-compose up -d'
                 echo 'Application deployed successfully.'
             }
         }
+
+        stage('Application Health Check') {
+            steps {
+                bat '''
+                    curl.exe --fail --silent --show-error http://127.0.0.1:8082/health
+                    curl.exe --fail --silent --show-error http://127.0.0.1:8082/api/users
+                    curl.exe --fail --silent --show-error http://127.0.0.1:8082/api/products
+                    curl.exe --fail --silent --show-error http://127.0.0.1:8082/api/orders
+                '''
+                echo 'All application health checks passed.'
+            }
+        }
+
+
     }
 
     post {
