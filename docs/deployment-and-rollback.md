@@ -54,3 +54,27 @@ curl.exe http://127.0.0.1:8082/health
 ## 5. Conclusion
 
 Docker image cleanup helps manage disk usage. Versioned images and Docker Compose provide a way to restore a previously working application deployment.
+## 6. Verified Jenkins Deployment Evidence
+
+Jenkins build #20 completed successfully with the result `SUCCESS`.
+
+The pipeline performed the following operations:
+
+- Deployed user-service, product-service and order-service using Docker Compose.
+- Verified the API Gateway health endpoint.
+- Tested the Users, Products and Orders API endpoints.
+- Confirmed that all application health checks passed.
+- Archived nine Trivy JSON vulnerability scan reports.
+
+Jenkins build #20:
+http://127.0.0.1:8080/job/three-microservices-cicd/20/
+
+### Rollback Verification Status
+
+The current application images are tagged `latest`. Separate versioned previous images have not yet been verified.
+
+Therefore, the rollback procedure is documented but has not yet been executed or tested.
+
+For reliable rollback, future deployments should use versioned image tags rather than relying exclusively on `latest`. A previous known-good image version should be retained until the new deployment has passed its health checks.
+
+Database volumes must be preserved during application rollback to avoid data loss.
